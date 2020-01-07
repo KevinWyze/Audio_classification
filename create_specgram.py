@@ -7,13 +7,14 @@ import numpy as np
 
 class CreateSpectrogram:
     def __init__(self):
-        self.spectrogram_path = Path('/Users/kli/Desktop/AI tasks/urbansound/UrbanSound8K/spectrogram/')
-        self.audio_path = Path('/Users/kli/Desktop/AI tasks/urbansound/UrbanSound8K/audio/')
+        self.spectrogram_path = Path('/home/ubuntu/kevin_folder/Audio_classification/UrbanSound8K/spectrogram/')
+        self.audio_path = Path('/home/ubuntu/kevin_folder/Audio_classification/UrbanSound8K/audio/')
 
     def create_fold_spectrogram(self, fold):
-        print(f'Processing fold {fold}')
-        os.mkdir(self.spectrogram_path / fold)
-        for audio_file in list(Path(self.audio_path / f'fold{fold}').glob('*.wav')):
+        print(f'Processing {fold}')
+        os.mkdir(self.spectrogram_path/fold)
+        for audio_file in list(Path(self.audio_path/f'{fold}').glob('*.wav')):
+            print(audio_file)
             samples, sample_rate = librosa.load(audio_file)
             fig = plt.figure(figsize=[0.72, 0.72])
             ax = fig.add_subplot(111)
@@ -30,4 +31,6 @@ class CreateSpectrogram:
 if __name__ == '__main__':
     create_spectrogram_operator = CreateSpectrogram()
     for i in range(1, 11):
-        create_spectrogram_operator.create_fold_spectrogram(str(i))
+        fold_name = 'fold' + str(i) 
+        print(fold_name)
+        create_spectrogram_operator.create_fold_spectrogram(fold_name)
