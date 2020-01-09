@@ -32,11 +32,10 @@ if __name__ == '__main__':
 
     learner = CnnLearner(opt.dataset_path)
 
-    #for i in range(1, 10):
-    #    learner.train_fold('fold'+str(i), opt.batch_size, opt.num_epochs)
+    for i in range(1, 10):
+        learner.train_fold('fold'+str(i), opt.batch_size, opt.num_epochs)
 
-    #learner.learn.save('/home/ubuntu/kevin_folder/Audio_classification/saved_model/trained_model')
+    learner.learn.save('/home/ubuntu/kevin_folder/Audio_classification/saved_model/trained_model')
     
-    learner.predict('fold1', '/saved_model/trained_model', '/home/ubuntu/kevin_folder/Audio_classification/UrbanSound8K/data/fold1/train/air_conditioner/166942-0-0-0.png')
 
         

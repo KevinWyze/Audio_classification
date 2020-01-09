@@ -4,15 +4,15 @@ import argparse
 import librosa
 from fastai import * 
 import os 
+import matplotlib.pyplot as plt 
+import librosa.display
 
 class Prediction:
     def __init__(self, dataset_path, audio_file, model_path):
         self.audio_file = audio_file
         #self.data_dir = Path(dataset_path)
         self.data_dir = Path(dataset_path)
-        print('check p1')
         self.data = ImageDataBunch.from_folder(self.data_dir /'fold1', size=224)
-        print('check p2')
         self.learn = cnn_learner(self.data, models.resnet34, metrics=error_rate)
         self.learn = self.learn.load(model_path)
         self.img_name = Path(self.audio_file).name.replace('.wav', '.png')
@@ -26,11 +26,11 @@ class Prediction:
         ax.axes.get_yaxis().set_visible(False)
         spec_fig = librosa.feature.melspectrogram(y=samples, sr=sample_rate)
         librosa.display.specshow(librosa.power_to_db(spec_fig, ref=np.max))
-        plt.savefig(img_name, dpi=400, bbox_inches='tight', pad_inches=0)
+        plt.savefig(self.img_name, dpi=400, bbox_inches='tight', pad_inches=0)
         plt.close('all')
 
     def predict_on_img(self):
-        img = im.open_image(self.image_name)
+        img = im.open_image(self.img_name)
         pred_class, pred_idx, outputs = self.learn.predict(img)
         return(pred_class, outputs[pred_idx])
 
@@ -38,9 +38,9 @@ class Prediction:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset_path", type = str, default = "/home/ubuntu/kevin_folder/Audio_classifcation/UrbanSound8K/data", help ="Path to dataset")
-    parser.add_argument("--predict_audio_path", type=str, default="", help="Path to audio to predict")
-    parser.add_argument("--checkpoint_model", type=str, default="/home/ubuntu/kevin_folder/Audio_classifcation/UrbanSound8K/saved_model/trained_model", help="Path to a saved model")
+    parser.add_argument("--dataset_path", type = str, default = "/home/ubuntu/kevin_folder/Audio_classification/UrbanSound8K/data", help ="Path to dataset")
+    parser.add_argument("--predict_audio_path", type=str, default="/home/ubuntu/kevin_folder/Audio_classification/UrbanSound8K/audio/fold1/146186-5-0-7.wav", help="Path to audio to predict")
+    parser.add_argument("--checkpoint_model", type=str, default="/home/ubuntu/kevin_folder/Audio_classification/saved_model/trained_model", help="Path to a saved model")
 
 
     opt = parser.parse_args()
