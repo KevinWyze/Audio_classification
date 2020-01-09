@@ -2,14 +2,18 @@ from fastai.vision import *
 from fastai.vision import image as im
 import argparse
 import librosa
-
+from fastai import * 
+import os 
 
 class Prediction:
     def __init__(self, dataset_path, audio_file, model_path):
         self.audio_file = audio_file
-        self.data_dir = Path(self.dataset_path)
-        self.data = ImageDataBunch.from_folder(data_dir, ds_tfms=[], size=224)
-        self.learn = cnn_learner(data, models.resnet34, metrics=error_rate)
+        #self.data_dir = Path(dataset_path)
+        self.data_dir = Path(dataset_path)
+        print('check p1')
+        self.data = ImageDataBunch.from_folder(self.data_dir /'fold1', size=224)
+        print('check p2')
+        self.learn = cnn_learner(self.data, models.resnet34, metrics=error_rate)
         self.learn = self.learn.load(model_path)
         self.img_name = Path(self.audio_file).name.replace('.wav', '.png')
 
@@ -34,7 +38,7 @@ class Prediction:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dataset_path", type = str, default = "/home/ubuntu/kevin_folder/Audio_classifcation/UrbanSound8K/data/fold1", help ="Path to dataset")
+    parser.add_argument("--dataset_path", type = str, default = "/home/ubuntu/kevin_folder/Audio_classifcation/UrbanSound8K/data", help ="Path to dataset")
     parser.add_argument("--predict_audio_path", type=str, default="", help="Path to audio to predict")
     parser.add_argument("--checkpoint_model", type=str, default="/home/ubuntu/kevin_folder/Audio_classifcation/UrbanSound8K/saved_model/trained_model", help="Path to a saved model")
 
@@ -43,7 +47,7 @@ if __name__ == "__main__":
     print(opt)
 
 
-    predictor = ConvertSpectrogram(opt.dataset_path, opt.predict_audio_path, opt.checkpoint_model)
+    predictor = Prediction(opt.dataset_path, opt.predict_audio_path, opt.checkpoint_model)
     predictor.convert_audio_img()
     pred_class, pred_prob = predictor.predict_on_img()
     print(f'The prediction class is {pred_class} with probability {pred_prob}')
