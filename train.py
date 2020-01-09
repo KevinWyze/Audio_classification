@@ -12,6 +12,12 @@ class CnnLearner():
         data_train.normalize(imagenet_stats)
         self.learn = cnn_learner(data_train, models.resnet34, metrics=error_rate)
         self.learn.fit_one_cycle(epoch, max_lr=slice(3e-6, 3e-4))
+    
+    def predict(self, fold, model_path, image_path):
+        data_train = ImageDataBunch.from_folder(self.data_dir / fold, size = 224)
+        learn = cnn_learner(data_train, models.resnet34, metrics = error_rate)
+        learn.load(model_path)
+        print(learn.predict(image_path))
 
 
 
@@ -26,9 +32,11 @@ if __name__ == '__main__':
 
     learner = CnnLearner(opt.dataset_path)
 
-    for i in range(1, 10):
-        learner.train_fold('fold'+str(i), opt.batch_size, opt.num_epochs)
+    #for i in range(1, 10):
+    #    learner.train_fold('fold'+str(i), opt.batch_size, opt.num_epochs)
 
-    learner.learn.save('/home/ubuntu/kevin_folder/Audio_classification/saved_model/trained_model.pkl')
+    #learner.learn.save('/home/ubuntu/kevin_folder/Audio_classification/saved_model/trained_model')
+    
+    learner.predict('fold1', '/saved_model/trained_model', '/home/ubuntu/kevin_folder/Audio_classification/UrbanSound8K/data/fold1/train/air_conditioner/166942-0-0-0.png')
 
-
+        
