@@ -1,0 +1,2 @@
+include audio_cnn/saved_model/*
+include audio_cnn/data/*
