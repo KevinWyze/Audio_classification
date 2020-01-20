@@ -8,14 +8,13 @@ import matplotlib.pyplot as plt
 import librosa.display
 
 class Prediction:
-    def __init__(self, dataset_path, audio_file, model_path):
+    def __init__(self, audio_file, model_path, data_path):
         self.audio_file = audio_file
-        #self.data_dir = Path(dataset_path)
-        self.data_dir = Path(dataset_path)
-        self.data = ImageDataBunch.from_folder(self.data_dir, size=224)
-        self.learn = cnn_learner(self.data, models.resnet34, metrics=error_rate)
-        self.learn = self.learn.load(model_path)
+        self.data_path = data_path
         self.img_name = Path(self.audio_file).name.replace('.wav', '.png')
+        self.data = ImageDataBunch.from_folder(self.data_path, ds_tfms=get_transforms(), size=224).normalize(imagenet_stats)
+        self.learn = cnn_learner(self.data, models.resnet34, metrics=accuracy)
+        self.learn.load(model_path)
 
 
     def convert_audio_img(self):
@@ -48,7 +47,7 @@ if __name__ == "__main__":
     print(opt)
 
 
-    predictor = Prediction(opt.dataset_path, opt.predict_audio_path, opt.checkpoint_model)
+    predictor = Prediction(opt.predict_audio_path, opt.dataset_path, opt.checkpoint_model)
     predictor.convert_audio_img()
     pred_class, pred_idx, pred_prob = predictor.predict_on_img()
     actual_class = opt.predict_audio_path.split('-')[1]
