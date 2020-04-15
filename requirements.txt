@@ -1,7 +1,11 @@
 os
-shutil
-pathlib
-fastai
-librosa
+tqdm
 numpy
 argparse
+pandas
+random
+datetime
+pickle
+librosa
+scikit-learn
+tensorflow-gpu==1.14
