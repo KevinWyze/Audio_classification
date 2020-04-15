@@ -8,6 +8,20 @@ model evaluation, and demo presentation. For more information about the research
 please refer to [Wyze Audio Detection](https://wyzelabs.atlassian.net/wiki/spaces/A/pages/229244975/Audio+Detection+intern+project).
 
 
+## Feature Extraction
+
+
+## Model Training
+
+
+## Model Evaluation
+
+
+## Demo Presentation 
+
+
+
+
 
  
 
