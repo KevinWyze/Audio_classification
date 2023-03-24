@@ -8,4 +8,4 @@ datetime
 pickle
 librosa
 scikit-learn
-tensorflow-gpu==1.14
+tensorflow-gpu==2.12.0
